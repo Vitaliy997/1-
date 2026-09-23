@@ -4,6 +4,10 @@
 #include <string>
 #include <sstream>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 class Variant5Calculator {
 private:
     // Початкові значення для варіанту 5 (y = 0.47*5, z = -1.32*5)
@@ -15,10 +19,10 @@ public:
     double calc_b(double x) {
         double num1 = x * x + (z * z) / std::pow(std::tan(std::pow(std::abs(x), 0.3)), 2);
         double den1 = 3 + x + (y * y) / 2.0 + (z * z * z) / 6.0;
-        
+
         double log_inner = std::pow(std::abs(y / z), 1.0 / 3.0);
         double term2 = std::pow(std::abs(std::log(log_inner)), 0.3);
-        
+
         return (num1 / den1) + term2;
     }
 
@@ -27,7 +31,7 @@ public:
         double num1 = 2 * std::cos(std::pow(std::abs(x), 1.0 / 3.0)) - (x * x) / 6.0;
         double den1 = (z / b) + std::pow(std::sin(std::pow(y + z, 3)), 2);
         double term2 = std::pow(std::log(std::pow(std::abs(z), 0.6)), 2);
-        
+
         return (num1 / den1) + term2;
     }
 
@@ -72,8 +76,17 @@ public:
 };
 
 int main() {
+#ifdef _WIN32
+    // Налаштування кодування консолі для Windows на UTF-8
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
+#else
+    // Для Linux / macOS
+    std::setlocale(LC_ALL, "uk_UA.UTF-8");
+#endif
+
     Variant5Calculator calc;
-    
+
     // Виконання завдань
     calc.runTask1();
     calc.runTask2();
